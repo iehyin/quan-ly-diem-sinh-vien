@@ -3,8 +3,8 @@ package entity;
 import java.util.ArrayList;
 
 public class Diem {
-    private String maSv;
-    private String maMonHoc;
+    private SinhVien sinhVien;
+    private MonHoc monHoc;
     private ArrayList<Float> thuongKy;
     private float diemGiuaKy;
     private float diemCuoiKy;
@@ -13,28 +13,28 @@ public class Diem {
         thuongKy = new ArrayList<>();
     }
 
-    public Diem(String maSv, String maMonHoc, ArrayList<Float> thuongKy, float diemGiuaKy, float diemCuoiKy) {
-        this.maSv = maSv;
-        this.maMonHoc = maMonHoc;
+    public Diem(SinhVien sinhVien, MonHoc monHoc, ArrayList<Float> thuongKy, float diemGiuaKy, float diemCuoiKy) {
+        this.sinhVien = sinhVien;
+        this.monHoc = monHoc;
         this.thuongKy = thuongKy;
         this.diemGiuaKy = diemGiuaKy;
         this.diemCuoiKy = diemCuoiKy;
     }
 
-    public String getMaSv() {
-        return maSv;
+    public SinhVien getSinhVien() {
+        return sinhVien;
     }
 
-    public void setMaSv(String maSv) {
-        this.maSv = maSv;
+    public void setSinhVien(SinhVien sinhVien) {
+        this.sinhVien = sinhVien;
     }
 
-    public String getMaMonHoc() {
-        return maMonHoc;
+    public MonHoc getMonHoc() {
+        return monHoc;
     }
 
-    public void setMaMonHoc(String maMonHoc) {
-        this.maMonHoc = maMonHoc;
+    public void setMonHoc(MonHoc monHoc) {
+        this.monHoc = monHoc;
     }
 
     public ArrayList<Float> getThuongKy() {
