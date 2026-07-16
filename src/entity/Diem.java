@@ -1,16 +1,22 @@
 package entity;
 
+import java.util.ArrayList;
+
 public class Diem {
     private String maSv;
     private String maMonHoc;
-    private float diemThuongKy;
+    private ArrayList<Float> thuongKy;
     private float diemGiuaKy;
     private float diemCuoiKy;
 
-    public Diem(String maSv, String maMonHoc, float diemThuongKy, float diemGiuaKy, float diemCuoiKy) {
+    public Diem() {
+        thuongKy = new ArrayList<>();
+    }
+
+    public Diem(String maSv, String maMonHoc, ArrayList<Float> thuongKy, float diemGiuaKy, float diemCuoiKy) {
         this.maSv = maSv;
         this.maMonHoc = maMonHoc;
-        this.diemThuongKy = diemThuongKy;
+        this.thuongKy = thuongKy;
         this.diemGiuaKy = diemGiuaKy;
         this.diemCuoiKy = diemCuoiKy;
     }
@@ -31,12 +37,12 @@ public class Diem {
         this.maMonHoc = maMonHoc;
     }
 
-    public float getDiemThuongKy() {
-        return diemThuongKy;
+    public ArrayList<Float> getThuongKy() {
+        return thuongKy;
     }
 
-    public void setDiemThuongKy(float diemThuongKy) {
-        this.diemThuongKy = diemThuongKy;
+    public void setThuongKy(ArrayList<Float> thuongKy) {
+        this.thuongKy = thuongKy;
     }
 
     public float getDiemGiuaKy() {
