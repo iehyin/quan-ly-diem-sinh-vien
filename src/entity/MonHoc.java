@@ -8,7 +8,7 @@ public class MonHoc {
     public MonHoc() {
     }
 
-    public DataStorage(String maMonHoc, String tenMonHoc, int soTinChi) {
+    public MonHoc(String maMonHoc, String tenMonHoc, int soTinChi) {
         this.maMonHoc = maMonHoc;
         this.tenMonHoc = tenMonHoc;
         this.soTinChi = soTinChi;
