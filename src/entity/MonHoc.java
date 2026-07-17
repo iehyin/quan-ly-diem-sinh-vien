@@ -1,6 +1,8 @@
 package entity;
 
-public class MonHoc {
+import java.io.Serializable;
+
+public class MonHoc implements Serializable {
     private String maMonHoc;
     private String tenMonHoc;
     private int soTinChi;
