@@ -1,6 +1,8 @@
 package entity;
 
-public class Nguoi {
+import java.io.Serializable;
+
+public class Nguoi implements Serializable {
     private String hoTen;
     private String ngaySinh;
 

@@ -1,8 +1,9 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Diem {
+public class Diem implements Serializable {
     private SinhVien sinhVien;
     private MonHoc monHoc;
     private ArrayList<Float> thuongKy;
