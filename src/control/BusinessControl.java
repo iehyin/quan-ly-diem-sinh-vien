@@ -146,9 +146,8 @@ public class BusinessControl {
         }
 
         // chặn trùng
-        if (storage.timDiem(maMh, maSv) != null) {
+        if (storage.timDiem(maSv, maMh) != null) {
             thongBaoLoi = "Đã có điểm môn này rồi";
-            return false;
         }
 
         Diem diem = new Diem(sv, mh, thuongKy, gk, ck);
