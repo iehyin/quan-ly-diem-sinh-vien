@@ -10,42 +10,98 @@ import java.util.HashMap;
 
 public class BusinessControl {
     private DataStorage storage;
+    private String thongBaoLoi = "";
 
     public BusinessControl() {
-        // Tự động load dữ liệu từ file storage.dat khi chương trình bật lên
         storage = DataStorage.loadFromFile();
     }
 
-    // =================================================================
-    // CÁC HÀM API DÀNH CHO TẦNG UI (THẢO VY GỌI CÁC HÀM NÀY)
-    // =================================================================
+    public String getThongBaoLoi() {
+        return thongBaoLoi;
+    }
 
-    // 1. Lưu toàn bộ dữ liệu xuống file (GỌI HÀM NÀY KHI CHỌN CHỨC NĂNG THOÁT APP)
     public void luuDuLieuTruocKhiThoat() {
         storage.saveToFile();
     }
 
-    // --- MODULE SINH VIÊN ---
+    // ================= SINH VIÊN =================
+
     public boolean themSinhVien(String hoTen, String ngaySinh, String lop, String maSv) {
+        thongBaoLoi = "";
+        if (hoTen == null || hoTen.trim().isEmpty()) {
+            thongBaoLoi = "Họ tên không được rỗng";
+            return false;
+        }
+
+        if (ngaySinh == null || ngaySinh.trim().isEmpty()) {
+            thongBaoLoi = "Ngày sinh không được rỗng";
+            return false;
+        }
+
+        if (lop == null || lop.trim().isEmpty()) {
+            thongBaoLoi = "Lớp không được rỗng";
+            return false;
+        }
+
+        if (maSv == null || maSv.trim().isEmpty()) {
+            thongBaoLoi = "MSSV không được rỗng";
+            return false;
+        }
+
+        if (maSv.length() < 3) {
+            thongBaoLoi = "MSSV quá ngắn";
+            return false;
+        }
+
+        if (storage.timSinhVien(maSv) != null) {
+            thongBaoLoi = "MSSV đã tồn tại";
+            return false;
+        }
+
         SinhVien sv = new SinhVien(hoTen, ngaySinh, lop, maSv);
         return storage.themSinhVien(sv);
     }
 
     public boolean xoaSinhVien(String maSv) {
-        return storage.xoaSinhVien(maSv);
-    }
 
-    public SinhVien timSinhVien(String maSv) {
-        return storage.timSinhVien(maSv);
+        thongBaoLoi = "";
+        if (maSv == null || maSv.trim().isEmpty()) {
+            thongBaoLoi = "MSSV không hợp lệ";
+            return false;
+        }
+
+        if (storage.timSinhVien(maSv) == null) {
+            thongBaoLoi = "Không tìm thấy sinh viên";
+            return false;
+        }
+
+        return storage.xoaSinhVien(maSv);
     }
 
     public HashMap<String, SinhVien> layDanhSachSinhVien() {
         return storage.getDsSinhVien();
     }
 
-    // --- MODULE MÔN HỌC ---
-    public boolean themMonHoc(String maMonHoc, String tenMonHoc, int soTinChi) {
-        MonHoc mh = new MonHoc(maMonHoc, tenMonHoc, soTinChi);
+    // ================= MÔN HỌC =================
+
+    public boolean themMonHoc(String ma, String ten, int tc) {
+        thongBaoLoi = "";
+        if (ma == null || ma.trim().isEmpty() || ten == null || ten.trim().isEmpty()) {
+            thongBaoLoi = "Thiếu thông tin môn học";
+            return false;
+        }
+
+        if (tc <= 0) {
+            thongBaoLoi = "Tín chỉ phải > 0";
+            return false;
+        }
+
+        if (storage.timMonHoc(ma) != null) {
+            thongBaoLoi = "Môn học đã tồn tại";
+            return false;
+        }
+
+        MonHoc mh = new MonHoc(ma, ten, tc);
         return storage.themMonHoc(mh);
     }
 
@@ -53,18 +109,50 @@ public class BusinessControl {
         return storage.getDsMonHoc();
     }
 
-    // --- MODULE ĐIỂM SỐ ---
-    public boolean themDiem(String maSv, String maMonHoc, ArrayList<Float> thuongKy, float giuaKy, float cuoiKy) {
-        // Validation cơ bản: Phải tồn tại SV và Môn học mới cho nhập điểm
-        SinhVien sv = storage.timSinhVien(maSv);
-        MonHoc mh = storage.timMonHoc(maMonHoc);
+    // ================= ĐIỂM =================
 
-        if (sv == null || mh == null) {
-            return false; // Không tồn tại SV hoặc Môn học
+    public boolean themDiem(String maSv, String maMh,
+                            ArrayList<Float> thuongKy,
+                            float gk, float ck) {
+
+        SinhVien sv = storage.timSinhVien(maSv);
+        MonHoc mh = storage.timMonHoc(maMh);
+        thongBaoLoi = "";
+        if (sv == null) {
+            thongBaoLoi = "Không có sinh viên";
+            return false;
         }
 
-        Diem diemMoi = new Diem(sv, mh, thuongKy, giuaKy, cuoiKy);
-        return storage.themDiem(diemMoi);
+        if (mh == null) {
+            thongBaoLoi = "Không có môn học";
+            return false;
+        }
+
+        //  kiểm tra điểm
+        if (gk < 0 || gk > 10 || ck < 0 || ck > 10) {
+            thongBaoLoi = "Điểm phải từ 0-10";
+            return false;
+        }
+
+        if (thuongKy == null || thuongKy.isEmpty()) {
+            thongBaoLoi = "Danh sách điểm thường kỳ không được rỗng";
+            return false;
+        }
+        for (Float d : thuongKy) {
+            if (d == null || d < 0 || d > 10) {   // thêm d == null để tránh crash nếu list có phần tử null
+                thongBaoLoi = "Điểm thường kỳ sai";
+                return false;
+            }
+        }
+
+        // chặn trùng
+        if (storage.timDiem(maMh, maSv) != null) {
+            thongBaoLoi = "Đã có điểm môn này rồi";
+            return false;
+        }
+
+        Diem diem = new Diem(sv, mh, thuongKy, gk, ck);
+        return storage.themDiem(diem);
     }
 
     public ArrayList<Diem> layDanhSachDiem() {
