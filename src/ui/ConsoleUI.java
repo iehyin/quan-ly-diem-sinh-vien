@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class ConsoleUI {
-    private Scanner scanner = new Scanner(System.in);
     private BusinessControl control;
 
     public ConsoleUI(BusinessControl control) {
@@ -18,15 +17,17 @@ public class ConsoleUI {
 
     public void start() {
         while (true) {
-            System.out.println("\n===== MENU =====");
-            System.out.println("1. Danh sách sinh viên");
-            System.out.println("2. Thêm sinh viên mới");
-            System.out.println("3. Nhập điểm theo MSSV");
-            System.out.println("4. Tra cứu điểm theo MSSV");
-            System.out.println("5. Thoát");
-            System.out.print("Chọn: ");
+            TUI.clear();
+            TUI.title("QUẢN LÝ ĐIỂM SINH VIÊN");
+            TUI.box(
+                    "1. Danh sách sinh viên",
+                    "2. Thêm sinh viên mới",
+                    "3. Nhập điểm theo MSSV",
+                    "4. Tra cứu điểm theo MSSV",
+                    "5. Thoát"
+            );
 
-            int chon = Integer.parseInt(scanner.nextLine());
+            int chon = TUI.number( "chon ", 1 ,5);
 
             if (chon == 1) {
                 hienThiDanhSachSinhVien();
@@ -38,92 +39,96 @@ public class ConsoleUI {
                 giaoDienTraCuuDiemTheoMSSV();
             } else if (chon == 5) {
                 control.luuDuLieuTruocKhiThoat();
-                System.out.println("Đã lưu và thoát!");
+                TUI.box( "Đã lưu và thoát!");
                 return;
             }
         }
     }
 
     private void hienThiDanhSachSinhVien() {
-        System.out.println("\n--- DANH SÁCH SINH VIÊN ---");
-        HashMap <String , SinhVien> dsSinhVien = control.layDanhSachSinhVien();
+        TUI.title("DANH SÁCH SINH VIÊN");
+        HashMap<String, SinhVien> dsSinhVien = control.layDanhSachSinhVien();
+
         if (dsSinhVien.isEmpty()) {
-            System.out.println("Danh sách trống.");
+            TUI.box("Danh sách trống.");
             return;
         }
+
+        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{6, 20, 10, 8});
         for (SinhVien sv : dsSinhVien.values()) {
-            System.out.println("MSSV: " + sv.getMaSv() +
-                    " | Họ tên: " + sv.getHoTen() +
-                    " | Ngày sinh: " + sv.getNgaySinh() +
-                    " | Lớp: " + sv.getLop());
+            TUI.tableRow(sv.getMaSv(), sv.getHoTen(), sv.getNgaySinh(), sv.getLop());
         }
+        TUI.tableFooter();
     }
 
     private void giaoDienNhapSinhVien() {
-        System.out.print("Nhập MSSV: ");
-        String maSv = scanner.nextLine();
-        System.out.print("Nhập họ tên: ");
-        String hoTen = scanner.nextLine();
-        System.out.print("Nhập ngày sinh: ");
-        String ngaySinh = scanner.nextLine();
-        System.out.print("Nhập lớp: ");
-        String lop = scanner.nextLine();
+        TUI.title("THÊM SINH VIÊN MỚI");
+
+        String maSv = TUI.text("Nhập MSSV: ");
+        String hoTen = TUI.text("Nhập họ tên: ");
+        String ngaySinh = TUI.text("Nhập ngày sinh: ");
+        String lop = TUI.text("Nhập lớp: ");
 
         boolean ok = control.themSinhVien(hoTen, ngaySinh, lop, maSv);
-        System.out.println(ok ? "Đã thêm sinh viên." : "MSSV đã tồn tại!");
+        if(ok) {
+            TUI.success("Đã thêm sinh viên");
+        } else {
+            TUI.error("MSSV đã tồn tại");
+        };
     }
 
     // Chức năng 3: Nhập điểm và hiển thị danh sách môn học tối giản
     private void giaoDienNhapDiemTheoMSSV() {
-        System.out.print("Nhập MSSV cần nhập điểm: ");
-        String maSv = scanner.nextLine();
-        SinhVien sv = control.timSinhVien(maSv);
+        TUI.title("NHẬP ĐIỂM THEO MSSV");
 
-        // Hiển thị danh sách môn học không theo format nhãn chữ cũ
-        System.out.println("\n--- DANH SÁCH MÔN HỌC ---");
+        String maSv = TUI.text("Nhập MSSV cần nhập điểm: ");
+
+        TUI.tableHeader("Danh sách môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{6, 30, 5});
         for (MonHoc mh : control.layDanhSachMonHoc().values()) {
-            System.out.println(mh.getMaMonHoc() + " | " + mh.getTenMonHoc() + " | " + mh.getSoTinChi() + " TC");
+            TUI.tableRow(mh.getMaMonHoc(), mh.getTenMonHoc(), String.valueOf(mh.getSoTinChi()));
         }
-        System.out.println("-------------------------");
-        System.out.print("Nhập mã môn học: ");
-        String maMh = scanner.nextLine();
-        MonHoc mh = control.layDanhSachMonHoc().get(maMh);
+        TUI.tableFooter();
 
-        System.out.print("Nhập điểm Thường Kỳ: ");
-        float diemTK = Float.parseFloat(scanner.nextLine());
+        String maMh = TUI.text("Nhập mã môn học: ");
+
+        float diemTK = TUI.score("Nhập điểm Thường Kỳ: ");
         ArrayList<Float> thuongKy = new ArrayList<>();
         thuongKy.add(diemTK);
 
-        System.out.print("Nhập điểm Giữa Kỳ: ");
-        float diemGK = Float.parseFloat(scanner.nextLine());
-        System.out.print("Nhập điểm Cuối Kỳ: ");
-        float diemCK = Float.parseFloat(scanner.nextLine());
+        float diemGK = TUI.score("Nhập điểm Giữa Kỳ: ");
+        float diemCK = TUI.score("Nhập điểm Cuối Kỳ: ");
 
         boolean ok = control.themDiem(maSv, maMh, thuongKy, diemGK, diemCK);
-        System.out.println(ok ? "Đã thêm điểm." : "Không tìm thấy sinh viên hoặc môn học!");
+        if(ok) {
+            TUI.success("Đã thêm sinh viên");
+        } else {
+            TUI.error("Không tìm thấy sinh viên hoặc môn học!");
+        };
     }
 
     private void giaoDienTraCuuDiemTheoMSSV() {
-        System.out.print("Nhập MSSV cần tra cứu: ");
-        String maSv = scanner.nextLine();
+        TUI.title("TRA CỨU ĐIỂM THEO MSSV");
 
-        System.out.println("\n--- BẢNG ĐIỂM CỦA SINH VIÊN: " + maSv + " ---");
+        String maSv = TUI.text("Nhập MSSV cần tra cứu: ");
         boolean coDiem = false;
 
+        TUI.tableHeader("Kết quả học tập", new String[]{"Mã MH", "Tên môn học", "TK", "GK", "CK"}, new int[]{6, 20, 4, 4, 4});
         for (Diem diem : control.layDanhSachDiem()) {
             if (diem.getSinhVien().getMaSv().equals(maSv)) {
-                System.out.println("Tên: " + diem.getSinhVien().getHoTen());
-                // Đổi diem.getMonHoc().getMaMonHoc() thành gọi thêm cả getTenMonHoc()
-                System.out.println("Môn: " + diem.getMonHoc().getMaMonHoc() + " - " + diem.getMonHoc().getTenMonHoc() +
-                        " | Thường kỳ: " + diem.getThuongKy() +
-                        " | Giữa kỳ: " + diem.getDiemGiuaKy() +
-                        " | Cuối kỳ: " + diem.getDiemCuoiKy());
+                TUI.tableRow(
+                        diem.getMonHoc().getMaMonHoc(),
+                        diem.getMonHoc().getTenMonHoc(),
+                        String.valueOf(diem.getThuongKy()),
+                        String.valueOf(diem.getDiemGiuaKy()),
+                        String.valueOf(diem.getDiemCuoiKy())
+                );
                 coDiem = true;
             }
         }
+        TUI.tableFooter();
 
         if (!coDiem) {
-            System.out.println("Sinh viên này chưa có dữ liệu điểm.");
+            TUI.load("Sinh viên này chưa có dữ liệu điểm.");
         }
     }
 }
