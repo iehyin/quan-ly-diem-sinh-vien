@@ -62,21 +62,6 @@ public class BusinessControl {
         return storage.themSinhVien(sv);
     }
 
-    public boolean xoaSinhVien(String maSv) {
-
-        thongBaoLoi = "";
-        if (maSv == null || maSv.trim().isEmpty()) {
-            thongBaoLoi = "MSSV không hợp lệ";
-            return false;
-        }
-
-        if (storage.timSinhVien(maSv) == null) {
-            thongBaoLoi = "Không tìm thấy sinh viên";
-            return false;
-        }
-
-        return storage.xoaSinhVien(maSv);
-    }
 
     public HashMap<String, SinhVien> layDanhSachSinhVien() {
         return storage.getDsSinhVien();
@@ -145,16 +130,140 @@ public class BusinessControl {
             }
         }
 
-        // chặn trùng
-        if (storage.timDiem(maSv, maMh) != null) {
+        if (storage.timDiem(maMh, maSv) != null) {   // đổi đúng thứ tự
             thongBaoLoi = "Đã có điểm môn này rồi";
+            return false;
         }
-
         Diem diem = new Diem(sv, mh, thuongKy, gk, ck);
         return storage.themDiem(diem);
     }
 
     public ArrayList<Diem> layDanhSachDiem() {
         return storage.getDsDiem();
+    }
+
+    public boolean suaSinhVien(String maSv, String hoTenMoi, String ngaySinhMoi, String lopMoi) {
+        thongBaoLoi = "";
+        SinhVien sv = storage.timSinhVien(maSv);
+        if (sv == null) {
+            thongBaoLoi = "Không tìm thấy sinh viên";
+            return false;
+        }
+        if (hoTenMoi == null || hoTenMoi.trim().isEmpty()) {
+            thongBaoLoi = "Họ tên không được rỗng";
+            return false;
+        }
+        if (ngaySinhMoi == null || ngaySinhMoi.trim().isEmpty()) {
+            thongBaoLoi = "Ngày sinh không được rỗng";
+            return false;
+        }
+        if (lopMoi == null || lopMoi.trim().isEmpty()) {
+            thongBaoLoi = "Lớp không được rỗng";
+            return false;
+        }
+
+        sv.setHoTen(hoTenMoi);
+        sv.setNgaySinh(ngaySinhMoi);
+        sv.setLop(lopMoi);
+        return storage.suaSinhVien(sv);
+    }
+
+    public boolean xoaSinhVien(String maSv) {
+
+        thongBaoLoi = "";
+        if (maSv == null || maSv.trim().isEmpty()) {
+            thongBaoLoi = "MSSV không hợp lệ";
+            return false;
+        }
+
+        if (storage.timSinhVien(maSv) == null) {
+            thongBaoLoi = "Không tìm thấy sinh viên";
+            return false;
+        }
+
+        // ↓↓↓ ĐOẠN CẦN THÊM MỚI ↓↓↓
+        for (Diem d : storage.getDsDiem()) {
+            if (d.getSinhVien().getMaSv().equals(maSv)) {
+                thongBaoLoi = "Sinh viên đã có điểm, không thể xóa";
+                return false;
+            }
+        }
+        // ↑↑↑ ĐOẠN CẦN THÊM MỚI ↑↑↑
+
+        return storage.xoaSinhVien(maSv);
+    }
+
+// ================= MÔN HỌC =================
+
+    public boolean suaMonHoc(String ma, String tenMoi, int tcMoi) {
+        thongBaoLoi = "";
+        MonHoc mh = storage.timMonHoc(ma);
+        if (mh == null) {
+            thongBaoLoi = "Không tìm thấy môn học";
+            return false;
+        }
+        if (tenMoi == null || tenMoi.trim().isEmpty()) {
+            thongBaoLoi = "Tên môn học không được rỗng";
+            return false;
+        }
+        if (tcMoi <= 0) {
+            thongBaoLoi = "Tín chỉ phải > 0";
+            return false;
+        }
+
+        mh.setTenMonHoc(tenMoi);
+        mh.setSoTinChi(tcMoi);
+        return storage.suaMonHoc(mh);
+    }
+
+    public boolean xoaMonHoc(String ma) {
+        thongBaoLoi = "";
+        if (storage.timMonHoc(ma) == null) {
+            thongBaoLoi = "Không tìm thấy môn học";
+            return false;
+        }
+        // Chặn xóa nếu môn học đã có điểm (tránh dữ liệu điểm mồ côi)
+        for (Diem d : storage.getDsDiem()) {
+            if (d.getMonHoc().getMaMonHoc().equals(ma)) {
+                thongBaoLoi = "Môn học đã có điểm, không thể xóa";
+                return false;
+            }
+        }
+        return storage.xoaMonHoc(ma);
+    }
+
+// ================= ĐIỂM =================
+
+    public boolean suaDiem(String maSv, String maMh, ArrayList<Float> thuongKy, float gk, float ck) {
+        thongBaoLoi = "";
+        if (storage.timDiem(maMh, maSv) == null) {
+            thongBaoLoi = "Chưa có điểm để sửa";
+            return false;
+        }
+        if (gk < 0 || gk > 10 || ck < 0 || ck > 10) {
+            thongBaoLoi = "Điểm phải từ 0-10";
+            return false;
+        }
+        if (thuongKy == null || thuongKy.isEmpty()) {
+            thongBaoLoi = "Danh sách điểm thường kỳ không được rỗng";
+            return false;
+        }
+        for (Float d : thuongKy) {
+            if (d == null || d < 0 || d > 10) {
+                thongBaoLoi = "Điểm thường kỳ sai";
+                return false;
+            }
+        }
+        return storage.suaDiem(maSv, maMh, thuongKy, gk, ck);
+    }
+
+    public boolean xoaDiem(String maSv, String maMh) {
+        thongBaoLoi = "";
+        Diem diem = storage.timDiem(maMh, maSv);
+        if (diem == null) {
+            thongBaoLoi = "Không tìm thấy điểm để xóa";
+            return false;
+        }
+        return storage.xoaDiem(diem);
     }
 }
