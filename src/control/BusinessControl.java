@@ -130,7 +130,7 @@ public class BusinessControl {
             }
         }
 
-        if (storage.timDiem(maMh, maSv) != null) {   // đổi đúng thứ tự
+        if (storage.timDiem(maMh, maSv) != null) {
             thongBaoLoi = "Đã có điểm môn này rồi";
             return false;
         }
@@ -181,14 +181,14 @@ public class BusinessControl {
             return false;
         }
 
-        // ↓↓↓ ĐOẠN CẦN THÊM MỚI ↓↓↓
+
         for (Diem d : storage.getDsDiem()) {
             if (d.getSinhVien().getMaSv().equals(maSv)) {
                 thongBaoLoi = "Sinh viên đã có điểm, không thể xóa";
                 return false;
             }
         }
-        // ↑↑↑ ĐOẠN CẦN THÊM MỚI ↑↑↑
+
 
         return storage.xoaSinhVien(maSv);
     }
