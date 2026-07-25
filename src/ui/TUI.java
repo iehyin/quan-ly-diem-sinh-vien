@@ -41,8 +41,8 @@ public final class TUI {
 
     /** In hộp thông báo đơn giản (không có cột), dùng cho lời nhắc / kết quả / lỗi */
     public static void box(String... lines) {
-        int width = 58;
-        for (String l : lines) width = Math.max(width, Math.min(l.length(), 58));
+        int width = 60;
+        for (String l : lines) width = Math.max(width, Math.min(l.length(), 60));
         System.out.println("┌" + "─".repeat(width + 2) + "┐");
         for (String l : lines) {
             System.out.printf("│ %-" + width + "s │%n", truncate(l, width));

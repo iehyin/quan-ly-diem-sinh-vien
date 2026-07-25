@@ -27,7 +27,7 @@ public class ConsoleUI {
                     "5. Thoát"
             );
 
-            int chon = TUI.number( "chon ", 1 ,5);
+            int chon = TUI.number( "Chọn ", 1 ,5);
 
             if (chon == 1) {
                 hienThiDanhSachSinhVien();
@@ -42,6 +42,7 @@ public class ConsoleUI {
                 TUI.box( "Đã lưu và thoát!");
                 return;
             }
+            TUI.pause();
         }
     }
 
