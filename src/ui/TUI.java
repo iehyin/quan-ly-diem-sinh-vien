@@ -50,7 +50,7 @@ public final class TUI {
         System.out.println("└" + "─".repeat(width + 2) + "┘");
     }
     public static void boxColor(String color, String... lines) {
-        int width = 58;
+        int width = 60;
         for (String l : lines) width = Math.max(width, Math.min(l.length(), 58));
         System.out.println("┌" + "─".repeat(width + 2) + "┐");
         for (String l : lines) {
