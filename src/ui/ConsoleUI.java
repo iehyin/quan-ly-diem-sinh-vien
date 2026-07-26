@@ -23,12 +23,13 @@ public class ConsoleUI {
                     "1. Danh sách sinh viên",
                     "2. Thêm sinh viên mới",
                     "3. Thêm môn học mới",
-                    "4. Nhập điểm theo MSSV",
-                    "5. Tra cứu điểm theo MSSV",
-                    "6. Thoát"
+                    "4. Danh sách môn học",
+                    "5. Nhập điểm theo MSSV",
+                    "6. Tra cứu điểm theo MSSV",
+                    "7. Thoát"
             );
 
-            int chon = TUI.number("chon ", 1, 6);
+            int chon = TUI.number("chon ", 1, 7);
 
             if (chon == 1) {
                 hienThiDanhSachSinhVien();
@@ -37,10 +38,12 @@ public class ConsoleUI {
             } else if (chon == 3) {
                 giaoDienNhapMonHoc();
             } else if (chon == 4) {
-                giaoDienNhapDiemTheoMSSV();
+                hienThiDanhSachMonHoc();
             } else if (chon == 5) {
-                giaoDienTraCuuDiemTheoMSSV();
+                giaoDienNhapDiemTheoMSSV();
             } else if (chon == 6) {
+                giaoDienTraCuuDiemTheoMSSV();
+            } else if (chon == 7) {
                 control.luuDuLieuTruocKhiThoat();
                 TUI.box("Đã lưu và thoát!");
                 return;
@@ -57,7 +60,7 @@ public class ConsoleUI {
             return;
         }
 
-        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{6, 20, 10, 8});
+        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{10, 20, 10, 8});
         for (SinhVien sv : dsSinhVien.values()) {
             TUI.tableRow(sv.getMaSv(), sv.getHoTen(), sv.getNgaySinh(), sv.getLop());
         }
@@ -96,13 +99,27 @@ public class ConsoleUI {
         }
     }
 
-    // Chức năng 3: Nhập điểm và hiển thị danh sách môn học tối giản
+    private void hienThiDanhSachMonHoc() {
+        TUI.title("DANH SÁCH MÔN HỌC");
+        HashMap<String, MonHoc> dsMonHoc = control.layDanhSachMonHoc();
+
+        if (dsMonHoc.isEmpty()) {
+            TUI.box("Danh sách trống.");
+            return;
+        }
+
+        TUI.tableHeader("Môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{6, 30, 5});
+        for (MonHoc mh : dsMonHoc.values()) {
+            TUI.tableRow(mh.getMaMonHoc(), mh.getTenMonHoc(), String.valueOf(mh.getSoTinChi()));
+        }
+        TUI.tableFooter();
+    }
     private void giaoDienNhapDiemTheoMSSV() {
         TUI.title("NHẬP ĐIỂM THEO MSSV");
 
         String maSv = TUI.text("Nhập MSSV cần nhập điểm: ");
 
-        TUI.tableHeader("Danh sách môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{6, 30, 5});
+        TUI.tableHeader("Danh sách môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{10, 30, 5});
         for (MonHoc mh : control.layDanhSachMonHoc().values()) {
             TUI.tableRow(mh.getMaMonHoc(), mh.getTenMonHoc(), String.valueOf(mh.getSoTinChi()));
         }
