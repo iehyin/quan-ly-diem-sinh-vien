@@ -72,9 +72,9 @@ public class ConsoleUI {
 
         boolean ok = control.themSinhVien(hoTen, ngaySinh, lop, maSv);
         if(ok) {
-            TUI.success("Đã thêm sinh viên");
+            TUI.boxColor(TUI.GREEN, "ĐÃ THÊM SINH VIÊN");
         } else {
-            TUI.error("MSSV đã tồn tại");
+            TUI.boxColor(TUI.RED, "MSSV ĐÃ TỒN TẠI");
         };
     }
 
@@ -101,9 +101,9 @@ public class ConsoleUI {
 
         boolean ok = control.themDiem(maSv, maMh, thuongKy, diemGK, diemCK);
         if(ok) {
-            TUI.success("Đã thêm sinh viên");
+            TUI.boxColor(TUI.GREEN, "ĐÃ THÊM ĐIỂM");
         } else {
-            TUI.error("Không tìm thấy sinh viên hoặc môn học!");
+            TUI.boxColor(TUI.RED, "KHÔNG TÌM THẤY SINH VIÊN HOẶC MÔN HỌC!");
         };
     }
 
@@ -129,7 +129,8 @@ public class ConsoleUI {
         TUI.tableFooter();
 
         if (!coDiem) {
-            TUI.load("Sinh viên này chưa có dữ liệu điểm.");
+            TUI.load("");
+            TUI.boxColor(TUI.YELLOW, "SINH VIÊN NÀY CHƯA CÓ DỮ LIỆU ĐIỂM.");
         }
     }
 }
