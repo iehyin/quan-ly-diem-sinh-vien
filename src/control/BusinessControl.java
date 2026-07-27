@@ -53,6 +53,11 @@ public class BusinessControl {
         return storage.getDsMonHoc();
     }
 
+    // Trả về danh sách các môn học dưới dạng List
+    public ArrayList<MonHoc> layDanhSachMonHocList() {
+        return new ArrayList<>(storage.getDsMonHoc().values());
+    }
+
     // --- MODULE ĐIỂM SỐ ---
     public boolean themDiem(String maSv, String maMonHoc, ArrayList<Float> thuongKy, float giuaKy, float cuoiKy) {
         // Validation cơ bản: Phải tồn tại SV và Môn học mới cho nhập điểm

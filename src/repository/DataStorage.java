@@ -137,9 +137,9 @@ public class DataStorage implements Serializable {
         return true;
     }
      //Kiem tra tung thang diem trong danh sach diem
-    public Diem timDiem(String maMonHoc, String maSv) {
-        for(Diem diem: dsDiem){
-            if(diem.getSinhVien().getMaSv().equals(maSv) && diem.getMonHoc().getMaMonHoc().equals(maMonHoc)){
+     public Diem timDiem(String maSv, String maMonHoc) {
+         for (Diem diem : dsDiem) {
+             if (diem.getSinhVien().getMaSv().equals(maSv) && diem.getMonHoc().getMaMonHoc().equals(maMonHoc)) {
                 return diem;
             }
         }
