@@ -48,6 +48,7 @@ public class ConsoleUI {
                 TUI.box("Đã lưu và thoát!");
                 return;
             }
+            TUI.pause();
         }
     }
 
@@ -173,7 +174,8 @@ public class ConsoleUI {
         TUI.tableFooter();
 
         if (!coDiem) {
-            TUI.load("Sinh viên này chưa có dữ liệu điểm.");
+            TUI.load("");
+            TUI.boxColor(TUI.YELLOW, "SINH VIÊN NÀY CHƯA CÓ DỮ LIỆU ĐIỂM.");
         }
     }
 }
