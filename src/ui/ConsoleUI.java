@@ -29,7 +29,7 @@ public class ConsoleUI {
                     "7. Thoát"
             );
 
-            int chon = TUI.number("chon ", 1, 7);
+            int chon = TUI.number("Chọn ", 1, 7);
 
             if (chon == 1) {
                 hienThiDanhSachSinhVien();
