@@ -74,8 +74,8 @@ public final class TUI {
         currentWidths = widths;
         int innerWidth = sumWidth(widths);
 
-        System.out.println("┌" + "─".repeat(innerWidth) + "┐");
-        System.out.printf("│ %-" + (innerWidth - 2) + "s │%n", truncate(title, innerWidth - 2));
+        System.out.println("┌" + "─".repeat(innerWidth-1) + "┐");
+        System.out.printf("│ %-" + (innerWidth - 3) + "s │%n", truncate(title, innerWidth - 3));
         System.out.println(divider('├', '┬', '┤'));
 
         StringBuilder row = new StringBuilder("│");

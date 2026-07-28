@@ -61,7 +61,7 @@ public class ConsoleUI {
             return;
         }
 
-        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{10, 20, 10, 15});
+        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{8, 20, 10, 13});
         for (SinhVien sv : dsSinhVien.values()) {
             TUI.tableRow(sv.getMaSv(), sv.getHoTen(), sv.getNgaySinh(), sv.getLop());
         }
@@ -109,7 +109,7 @@ public class ConsoleUI {
             return;
         }
 
-        TUI.tableHeader("Môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{6, 30, 5});
+        TUI.tableHeader("Môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{11, 35, 8});
         for (MonHoc mh : dsMonHoc.values()) {
             TUI.tableRow(mh.getMaMonHoc(), mh.getTenMonHoc(), String.valueOf(mh.getSoTinChi()));
         }
@@ -120,7 +120,7 @@ public class ConsoleUI {
 
         String maSv = TUI.text("Nhập MSSV cần nhập điểm: ");
 
-        TUI.tableHeader("Danh sách môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{10, 30, 5});
+        TUI.tableHeader("Danh sách môn học", new String[]{"Mã MH", "Tên môn học", "Số TC"}, new int[]{11, 35, 8});
         for (MonHoc mh : control.layDanhSachMonHoc().values()) {
             TUI.tableRow(mh.getMaMonHoc(), mh.getTenMonHoc(), String.valueOf(mh.getSoTinChi()));
         }
@@ -151,7 +151,7 @@ public class ConsoleUI {
         String maSv = TUI.text("Nhập MSSV cần tra cứu: ");
         boolean coDiem = false;
 
-        TUI.tableHeader("Kết quả học tập", new String[]{"Mã MH", "Tên môn học", "TK", "GK", "CK"}, new int[]{6, 20, 12, 4, 4});
+        TUI.tableHeader("Kết quả học tập", new String[]{"Mã MH", "Tên môn học", "TK", "GK", "CK"}, new int[]{10, 20, 10, 4, 4});
         for (Diem diem : control.layDanhSachDiem()) {
             if (diem.getSinhVien().getMaSv().equals(maSv)) {
 
