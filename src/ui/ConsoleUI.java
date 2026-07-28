@@ -61,7 +61,7 @@ public class ConsoleUI {
             return;
         }
 
-        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{10, 20, 10, 8});
+        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{10, 20, 10, 15});
         for (SinhVien sv : dsSinhVien.values()) {
             TUI.tableRow(sv.getMaSv(), sv.getHoTen(), sv.getNgaySinh(), sv.getLop());
         }
