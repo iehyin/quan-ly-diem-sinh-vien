@@ -14,13 +14,19 @@ public final class TUI {
         return color + text + RESET;
     }
     public static void success(String message){
-        System.out.println(GREEN + message + RESET);
+        System.out.println(GREEN);
+        title(message);
+        System.out.println(RESET);
     }
     public static void error(String message){
-        System.out.println(RED + message + RESET);
+        System.out.println(RED);
+        title(message);
+        System.out.println(RESET);
     }
     public static void load(String message){
-        System.out.println(YELLOW + message + RESET);
+        System.out.println(YELLOW);
+        title(message);
+        System.out.println(RESET);
     }
     /* ========================= SCREEN ========================= */
 

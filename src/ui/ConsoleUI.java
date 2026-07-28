@@ -61,7 +61,7 @@ public class ConsoleUI {
             return;
         }
 
-        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{8, 20, 10, 13});
+        TUI.tableHeader("Sinh viên", new String[]{"MSSV", "Họ tên", "Ngày sinh", "Lớp"}, new int[]{13, 30, 10, 13});
         for (SinhVien sv : dsSinhVien.values()) {
             TUI.tableRow(sv.getMaSv(), sv.getHoTen(), sv.getNgaySinh(), sv.getLop());
         }
@@ -80,7 +80,7 @@ public class ConsoleUI {
         if (ok) {
             TUI.success("Đã thêm sinh viên");
         } else {
-            TUI.error("MSSV đã tồn tại");
+            TUI.error(control.getThongBaoLoi());
         }
         ;
     }
